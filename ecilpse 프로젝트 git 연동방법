@@ -1,0 +1,11 @@
+Eclipse 새 프로젝트 git 연동방법
+
+1. 원하는 프로젝트 선택
+2. Team 항목 클릭
+3. Share Project
+4. Repository 영역 create해서 내가 원하는 내 로컬호스트 저장소 선택
+5. Finish
+6. Team 항목 클릭 > Add to index클릭
+7. Team 항목 클릭 > commit
+8. 변경 사항 있는 파일 확인 후, commit 메시지 등록하고 commit & push 클릭
+9. 깃허브에서 commit 확인

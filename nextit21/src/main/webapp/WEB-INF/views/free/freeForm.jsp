@@ -126,5 +126,23 @@
 		<%@ include file="/WEB-INF/views/footer/footer.jsp" %>
     </footer>
 </div>  
+
+<script type="text/javascript">
+	$("#id_btn_new_file").click(function(){
+		$(".file_area").append(
+			'<div class="file_div">'
+			+ '<input type="file" name="boFiles" />'
+			+ '<>'
+			+ '<button type="button" class="btn_delete">삭제</button>'
+			+ '</div>'
+		)
+			
+	});
+	
+	$(".file_area").on("click", '.btn_delete', function(){
+		//alert(".file_area .btn_delete");
+		$(this).closest('div').remove();
+	})
+</script>
 </body>
 </html>

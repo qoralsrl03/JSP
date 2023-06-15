@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- 원래는 mvc : annotation 이런식으로 작성해야하는데 beans에 선언하고 알아서 잡아주기 때문에 필요없음-->
+	<!-- 사용자 요청 url을 @Controller로 보내서 처리하기 위해 필요한 HandlerMapping  
+		과 HandlerAdapter를 Bean으로 등록해준다.
+		HandlerMapping : HTTP 요청정보를 이용해서 컨트롤러를 찾아주는 기능을 합니다.
+		(즉 사용자 요청 url과 매칭되는 컨트롤러를 찾아 주는 일을 함)
+		
+		HandlerAdapter : HanderMapping을 통해서 찾은 컨트롤러를 직접 실행하는 기능을 수행합니다.
+		또한 컨트롤러(@Controller)에서 @RequestMapping 과 같은 어노테이션을 통해 해당 기능을 사용할 수 있도록 처리해 준다.
+		-->
+	<annotation-driven /> 
+	
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- resources는 해당 자원에 대한 경로를 처리합니다.
+		(현재 web.xml에서 모든요청("/")을 서블릿이 처리 하므로 css, image 같은 
+			서블릿이 처리 하지 않아도 되는 것들에 대해서 따로 패스를 지정해 주어야 한다. -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- InternalResourceViewResolver는 뷰 리저버이며 prefix와 suffix를 사용하여 경로를 편히 작성할 수 있도록 해줍니다. -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="kr.or.nexit" />
+	
+	
+	
+</beans:beans>

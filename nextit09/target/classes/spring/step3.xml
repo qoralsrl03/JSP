@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="driver" class="di.step3.dao.OracleDriver"></bean>
+	<!-- <bean id="free" class="di.step3.service.FreeBoardService">
+		<property name="driver" ref="driver"></property> setDriver를 set을 떼고 d를 소문자로 표현함, ref는 해당 이름의 클래스를 가져옴 둘이 다른거
+		<property name="examScore" value="61"></property>
+	</bean> -->
+	
+	<bean id="free" class="di.step3.service.FreeBoardService" p:driver-ref="driver" p:examScore="30"/>
+</beans>

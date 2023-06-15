@@ -95,8 +95,9 @@
 	
 	</interceptors>
 	
-	
-	
+	<!--스프링 컨트롤러가 파일을 받을수 있도록 StandardServletMultipartResolver 등록하기
+	 	(StandardServletMultipartResolver은 서블릿 3.0이상에서 동작함)-->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
 	
 	
 	

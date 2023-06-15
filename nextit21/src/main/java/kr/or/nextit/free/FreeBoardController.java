@@ -1,19 +1,28 @@
 package kr.or.nextit.free;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.code.service.ICommCodeService;
 import kr.or.nextit.code.vo.CodeVO;
+import kr.or.nextit.common.util.NextITFileUpload;
 import kr.or.nextit.common.valid.FreeFrom;
 import kr.or.nextit.common.valid.FreeModify;
 import kr.or.nextit.common.vo.ResultMessageVO;
@@ -30,6 +39,11 @@ import kr.or.nextit.free.vo.FreeBoardVO;
 @Controller
 @RequestMapping("/free")
 public class FreeBoardController {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private NextITFileUpload nextITFileUpload;
 	
 	@Resource(name="codeService")
 	private ICommCodeService codeService;
@@ -68,11 +82,42 @@ public class FreeBoardController {
 	public String freeRegister( @Validated(value = FreeFrom.class) @ModelAttribute("freeBoard") FreeBoardVO freeBoard
 			, BindingResult error 
 			,Model model
-			,ResultMessageVO resultMessageVO) {
+			,ResultMessageVO resultMessageVO
+			//,@RequestParam(required = false)MultipartFile boFiles
+			,@RequestParam(required = false)MultipartFile[] boFiles
+			) {
 		if(error.hasErrors()) {
 			return "/free/freeForm";
 		}
+		
+		//String originalFileName = boFiles.getOriginalFilename();
+		//logger.info("originalFileName : "+ originalFileName);
 
+		if(boFiles != null) {
+			/*String filePath ="/home/ssam/upload/";
+			try {
+			 	byte[] bytes = boFiles.getBytes();
+			 	File file = new File(filePath, boFiles.getOriginalFilename());
+			 	FileCopyUtils.copy(bytes, file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+			
+			 try {
+				List<AttachVO>  attachList = nextITFileUpload.fileUpload(boFiles, "FREE", "free");
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
 		try{
 			if(freeBoard.getBoTitle() != null && ! freeBoard.getBoTitle().equals("") ) {
 				freeBoardService.registerBoard(freeBoard);

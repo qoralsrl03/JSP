@@ -12,6 +12,11 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/freeBoardView.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/footer.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style type="text/css">
+.btn_delete{
+	float: right;
+}
+</style>
 </head>
 <body>
 <div id="wrap">
@@ -38,8 +43,12 @@
             <div class="content01_h1">
                 <h1>자유게시판</h1>
             </div>
-            <form:form id="freeForm" action="${pageContext.request.contextPath }/free/freeRegister" method="post" modelAttribute="freeBoard"
-            enctype="multipart/">
+            <form:form id="freeForm" 
+	            	action="${pageContext.request.contextPath }/free/freeRegister" 
+	            	method="post" 
+	            	modelAttribute="freeBoard"
+	            	enctype="multipart/form-data"
+	            	>
                   <div id="div_table">
                       <table>
                           <colgroup>
@@ -97,18 +106,20 @@
                           </tr>
                           		
                           		<!-- 파일업로드 -->	
-                          	<tr>
-                          		<td class="td_left"> 첨부파일
-                          			<button type="button" id="id_btn_new_file">추가</</button>
-                          	</tr>
-                          	<td class="td_right file_area">
-                          		<div class="file_div">
-                          			<input type="file" name="boFiles"/>
-                          			<button type="button" class="btn_delete">삭제</button>
-                          		</div>
-                          	</td>
-                          
-                          
+                         <tr>
+								<td class="td_left">첨부파일
+									<button type="button" id="id_btn_new_file">추가</button>
+								</td>	                         
+								<td class="td_rigth file_area">
+									<div class="file_div">
+										<input type="file" name="boFiles"/>
+										<button type="button" class="btn_delete">삭제</button>
+									</div>
+								</td>
+								
+								
+                         
+                         </tr>
                       </table>
                   </div>
                   <!-- 버튼 -->
@@ -128,21 +139,31 @@
 </div>  
 
 <script type="text/javascript">
-	$("#id_btn_new_file").click(function(){
-		$(".file_area").append(
-			'<div class="file_div">'
-			+ '<input type="file" name="boFiles" />'
-			+ '<>'
-			+ '<button type="button" class="btn_delete">삭제</button>'
-			+ '</div>'
-		)
-			
-	});
-	
-	$(".file_area").on("click", '.btn_delete', function(){
-		//alert(".file_area .btn_delete");
-		$(this).closest('div').remove();
-	})
+$("#id_btn_new_file").click(function(){
+	//alert("id_btn_new_file");
+	$(".file_area").append(
+		'<div class="file_div">'
+		+	'<input type="file" name="boFiles" />'
+		+	'<button type="button" class="btn_delete" >삭제</button>'
+		+'</div>'
+	);
+});
+
+
+$(".file_area").on("click" , '.btn_delete', function(){
+	//alert(".file_area .btn_delete");
+	$(this).closest('div').remove();
+});
+
+
+
+
 </script>
+
+
+
+
+
+
 </body>
 </html>

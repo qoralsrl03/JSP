@@ -1,9 +1,12 @@
 package kr.or.nextit.free.vo;
 
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.common.valid.FreeFrom;
 import kr.or.nextit.common.valid.FreeModify;
 
@@ -43,6 +46,16 @@ public class FreeBoardVO {
 	//rnum 추가
 	private String rnum; 
 	
+	//attachList 추가
+	private List<AttachVO> attachList;
+	
+	
+	public List<AttachVO> getAttachList() {
+		return attachList;
+	}
+	public void setAttachList(List<AttachVO> attachList) {
+		this.attachList = attachList;
+	}
 	public String getRnum() {
 		return rnum;
 	}
@@ -140,9 +153,11 @@ public class FreeBoardVO {
 		return "FreeBoardVO [boNo=" + boNo + ", boTitle=" + boTitle + ", boCategory=" + boCategory + ", boWriter="
 				+ boWriter + ", boPass=" + boPass + ", boContent=" + boContent + ", boIp=" + boIp + ", boHit=" + boHit
 				+ ", boRegDate=" + boRegDate + ", boModDate=" + boModDate + ", boDelYn=" + boDelYn + ", boDelId="
-				+ boDelId + ", boDelDate=" + boDelDate + ", boCategoryNm=" + boCategoryNm + ", rnum=" + rnum + "]";
+				+ boDelId + ", boDelDate=" + boDelDate + ", boCategoryNm=" + boCategoryNm + ", rnum=" + rnum
+				+ ", attachList=" + attachList + "]";
 	}
  
+	
 	
 	
 

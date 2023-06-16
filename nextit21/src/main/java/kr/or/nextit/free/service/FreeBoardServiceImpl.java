@@ -2,11 +2,15 @@ package kr.or.nextit.free.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.nextit.attach.mapper.IAttachMapper;
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.common.util.NextITSqlSessionFactory;
 import kr.or.nextit.exception.BizNotEffectedException;
 import kr.or.nextit.exception.BizNotFoundException;
@@ -18,11 +22,13 @@ import kr.or.nextit.free.vo.FreeBoardVO;
 @Service("freeBoardService")
 public class FreeBoardServiceImpl implements IFreeBoardService {
 
-	//SqlSessionFactory sqlSessionFactory = NextITSqlSessionFactory.getSqlSessionFactory();
-	
 	@Autowired
 	private IFreeBoardMapper freeMapper;
 
+	//@Autowired
+	@Inject
+	private IAttachMapper attachMapper;
+	
 	@Override
 	public void registerBoard(FreeBoardVO freeBoard) throws BizNotEffectedException {
 		// TODO Auto-generated method stub
@@ -38,6 +44,18 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 		if(resultCnt != 1) {
 			throw new BizNotEffectedException();
 		}
+		
+		List<AttachVO> attachList = freeBoard.getAttachList();
+		if(attachList !=null && attachList.size()>0) {
+			for(AttachVO attch : attachList) {
+				attch.setAtchParentNo(boNo);
+				attch.setAtchRegId(freeBoard.getBoWriter());
+				
+				attachMapper.insertAttach(attch);
+			}
+		}
+		
+		
 	}
 
 

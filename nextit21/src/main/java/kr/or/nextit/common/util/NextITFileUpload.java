@@ -2,6 +2,7 @@ package kr.or.nextit.common.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +30,7 @@ public class NextITFileUpload {
 		if(boFiles.length >0 ) {
 			for(MultipartFile boFile : boFiles) {
 				if(!boFile.isEmpty()) {
-					AttachVO attach 
-						= getAttachInfoAndFileUpload(boFile ,category ,path );
+					AttachVO attach = getAttachInfoAndFileUpload(boFile ,category ,path );
 					attachList.add(attach);	
 				}
 			}
@@ -62,12 +62,34 @@ public class NextITFileUpload {
 		attach.setAtchCategory(category);//FREE
 		attach.setAtchFileName(fileName);//5b20326a-3e05-4718-a8af-dc694b38cfc7
 		attach.setAtchOriginalName(boFile.getOriginalFilename());//nextit.txt
-		attach.setAtchFileSize(boFile.getSize());
+		attach.setAtchFileSize(boFile.getSize()); //1024
+		attach.setAtchConvertSize(convertSize(boFile.getSize())); // 1MB
+		attach.setAtchContentType(boFile.getContentType());// txt, jpg
+		attach.setAtchPath(filePath);
 		
 		
+		//return null;
+		return attach ;
+	}
+	
+	private DecimalFormat df = new DecimalFormat("#,###.0");
+	
+	private String convertSize(long size) {
+		// TODO Auto-generated method stub
 		
+		if(size<1024) {
+			return size + " Byte";
+			
+		}else if(size < (1024 * 1024) ) {
+			return df.format(size /1024.0) + " KB";
+			
+		}else if(size < (1024 * 1024 * 1024) ) {
+			return df.format(size /( 1024.0 * 1024.0 ) ) + " MB";
+		}else {
+			return df.format(size /( 1024.0 * 1024.0 * 1024.0 ) ) + " GB";
+		}
 		
-		return null;
+		//return null;
 	}
 
 }

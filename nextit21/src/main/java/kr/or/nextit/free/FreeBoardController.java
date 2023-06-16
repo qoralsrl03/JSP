@@ -106,6 +106,11 @@ public class FreeBoardController {
 			
 			 try {
 				List<AttachVO>  attachList = nextITFileUpload.fileUpload(boFiles, "FREE", "free");
+				
+				if(attachList.size()>0) {
+					freeBoard.setAttachList(attachList);
+				}
+				
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -113,8 +118,6 @@ public class FreeBoardController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
 		
 		

@@ -17,6 +17,7 @@
  		<package name="kr.or.nextit.member.vo"/>
  		<package name="kr.or.nextit.free.vo"/>
  		<package name="kr.or.nextit.reply.vo"/>
+ 		<package name="kr.or.nextit.attach.vo"/>
  	
  	</typeAliases>
  

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.nextit.attach.mapper.IAttachMapper">
+  
+<insert id="insertAttach" parameterType="AttachVO">
+		INSERT INTO attach (
+		atch_no
+		,atch_parent_no
+		,atch_category
+		,atch_file_name
+		,atch_original_name
+		,atch_file_size
+		,atch_convert_size
+		,atch_content_type
+		,atch_path
+		<!-- ,atch_down_hit -->
+		<!-- ,atch_del_yn -->
+		,atch_reg_id
+		<!-- ,atch_reg_date -->
+	) VALUES (
+		seq_attach.nextval
+		,#{atchParentNo}
+		,#{atchCategory}
+		,#{atchFileName}
+		,#{atchOriginalName}
+		,#{atchFileSize}
+		,#{atchConvertSize}
+		,#{atchContentType}
+		,#{atchPath}
+		<!-- ,#{atchDownHit} -->
+		<!-- ,#{atchDelYn} -->
+		,#{atchRegId}
+		<!-- ,sysdate -->
+	)
+
+</insert>
+
+
+</mapper>

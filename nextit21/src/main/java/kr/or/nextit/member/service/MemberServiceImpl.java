@@ -1,7 +1,9 @@
 package kr.or.nextit.member.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.or.nextit.attach.mapper.IAttachMapper;
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.common.util.NextITSqlSessionFactory;
 import kr.or.nextit.common.vo.RoleInfoVO;
 import kr.or.nextit.common.vo.UserRoleVO;
@@ -33,13 +38,13 @@ import kr.or.nextit.member.vo.MemberVO;
 @Service("memberService")
 public class MemberServiceImpl implements IMemberService {
 
-	
-	//@Inject
-	//private IMemberDao memDao;
-	
 	@Inject
 	private IMemberMapper memMapper;
 
+	@Autowired
+	private IAttachMapper attachMapper;
+	
+	
 	@Override
 	public void registerMember(MemberVO member) throws BizDuplicateKeyException, BizNotEffectedException {
 		// TODO Auto-generated method stub
@@ -65,6 +70,20 @@ public class MemberServiceImpl implements IMemberService {
 					throw new BizNotEffectedException();
 				}
 			}
+		 
+			List<AttachVO> attachList = member.getAttachList();
+			if(attachList !=null && attachList.size()>0) {
+				for(AttachVO attch : attachList) {
+					attch.setAtchParentNo(member.getMemId());
+					attch.setAtchRegId(member.getMemId());
+					
+					attachMapper.insertAttach(attch);
+				}
+			}
+		 
+		 
+		 
+		 
 	}
 
 	
@@ -129,6 +148,15 @@ public class MemberServiceImpl implements IMemberService {
 		if(member == null) {
 			throw new BizNotEffectedException();
 		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memId", memId);
+		map.put("atchCategory", "PROFILEPHOTO");
+		
+		Integer atchNo = attachMapper.getAttachNo(map);
+		
+		member.setAtchNo(atchNo);
+		
 		return member;
 		 
 	

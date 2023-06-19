@@ -22,4 +22,6 @@ public interface IAttachMapper {
 
 	void deleteAttaches(Map<String, Object> map);
 
+	Integer getAttachNo(Map<String, Object> map);
+
 }

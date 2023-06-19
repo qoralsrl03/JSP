@@ -108,11 +108,20 @@
 	>
 		#{atchNos}
 	</foreach>
-
-
-
 </delete>
 
+
+<select id="getAttachNo" parameterType="map"
+	resultType="int">
+	select
+		atch_no
+	from 
+		attach
+	where
+		atch_parent_no = #{memId}
+		and atch_category = #{atchCategory}
+
+</select>
 
 
 

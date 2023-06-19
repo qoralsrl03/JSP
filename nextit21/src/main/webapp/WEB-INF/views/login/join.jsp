@@ -74,6 +74,37 @@ span{
     border-radius: 5px;
     background-color: #166cea;
 }
+.profile_image{
+		width: 300px; 
+		height: 300px; 
+		background-color: lightgray;
+		position: absolute;
+		left: 450px;ㅋ
+	}
+	 
+	.upload {
+		width: 300px;
+		height: 250px;
+		/* background-color: antiquewhite; */
+	}
+	li {
+	  list-style: none;
+	}
+	.profile_image img{
+	  width: 300px;
+	  height: 250px;
+	}
+	.image-preview {
+		width: 300;
+		height: 250px;
+		background-color: #9b9b9d;
+		position: absolute;
+		top: 0px;
+	}
+	.profile_image input{
+		width: 200px;
+		margin-top: 15px;
+	}
 </style>
 
 <script>
@@ -345,15 +376,25 @@ function fn_checkId(){
 <body>
     <section class="login_form">
         <h1>NextIT</h1> 
-        <%-- <form name="loginForm"  method="post"> --%>
-        <form:form name="loginForm"  method="post" modelAttribute="member">
+        <form:form name="loginForm"  
+        	method="post" 
+        	modelAttribute="member"
+        	enctype="multipart/form-data"
+       		>
+			 <div class="profile_image">
+			 	<div class="upload">
+			 		<!-- 사진이 보여줄 위치 -->
+			 	</div>
+			 	<input type="file" 
+			 		class="real-upload" 
+			 		name="profilePhoto"
+			 		accept="image/*">
+			 	<ul class="image-preview"></ul>
+			 </div>	            
+
+
+            
             <div class="int-area">
-                <!-- <input type="text" 
-	                	id="memId" 
-	                	name="memId" 
-	                	value="" 
-	                	autocomplete="off" 
-	                	required="required"> -->
 					<form:input path="memId" autocomplete="off"/>
                 	<form:errors path="memId"></form:errors>
                  <label for=memId>USER ID</label>
@@ -449,6 +490,42 @@ function fn_checkId(){
             </div>
         </form:form>    
     </section>
-    
+
+
+<script>
+function getImageFiles(e) {
+	const files = e.currentTarget.files;
+	const imagePreview = document.querySelector('.image-preview');
+	const file = files[0];
+	const reader = new FileReader();
+	reader.onload =  function(e){  
+		const preview = createElement(e, file);
+		let imageLiTag = document.querySelector('.image-preview > li');
+		if(imageLiTag){
+			imagePreview.removeChild(imagePreview.firstElementChild);
+		}
+		imagePreview.appendChild(preview);
+	};
+	reader.readAsDataURL(file); 
+}
+
+function createElement(e, file) {
+	const li = document.createElement('li');
+	const img = document.createElement('img');
+	img.setAttribute('src', e.target.result); //img.setAttribute('src', reader.result);
+	img.setAttribute('data-file', file.name);
+	li.appendChild(img);
+	return li;
+}
+
+const realUpload = document.querySelector('.real-upload');
+const upload = document.querySelector('.upload');
+
+upload.addEventListener('click', function(e){
+	realUpload.click();  
+});
+
+realUpload.addEventListener('change', getImageFiles);
+</script>
 </body>
 </html>

@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.common.valid.MemberModify;
 import kr.or.nextit.common.valid.MemberRegister;
 import kr.or.nextit.common.vo.UserRoleVO;
@@ -63,11 +64,24 @@ public class MemberVO {
 			, message = "패스워드 영문,숫자 조합 4~10자로 입력해주세요"
 			, groups = MemberModify.class)
 	private String memPassNew;                     
-	
 	private String rememberMe;
 	private List<UserRoleVO> userRoleList;
 	private String rnum;
-	 
+	private List<AttachVO> attachList;
+	private Integer atchNo;
+
+	public Integer getAtchNo() {
+		return atchNo;
+	}
+	public void setAtchNo(Integer atchNo) {
+		this.atchNo = atchNo;
+	}
+	public List<AttachVO> getAttachList() {
+		return attachList;
+	}
+	public void setAttachList(List<AttachVO> attachList) {
+		this.attachList = attachList;
+	}
 	public String getRnum() {
 		return rnum;
 	}
@@ -189,7 +203,7 @@ public class MemberVO {
 				+ ", memMail=" + memMail + ", memJob=" + memJob + ", memHobby=" + memHobby + ", memMileage="
 				+ memMileage + ", memDelYn=" + memDelYn + ", memJoinDate=" + memJoinDate + ", memEditDate="
 				+ memEditDate + ", memPassNew=" + memPassNew + ", rememberMe=" + rememberMe + ", userRoleList="
-				+ userRoleList + ", rnum=" + rnum + "]";
+				+ userRoleList + ", rnum=" + rnum + ", attachList=" + attachList + ", atchNo=" + atchNo + "]";
 	}
  
 	

@@ -1,5 +1,6 @@
 package kr.or.nextit.member;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,10 +19,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.nextit.attach.vo.AttachVO;
 import kr.or.nextit.code.service.CommCodeServiceImpl;
 import kr.or.nextit.code.service.ICommCodeService;
 import kr.or.nextit.code.vo.CodeVO;
+import kr.or.nextit.common.util.NextITFileUpload;
 import kr.or.nextit.common.valid.MemberModify;
 import kr.or.nextit.common.valid.MemberRegister;
 import kr.or.nextit.common.vo.ResultMessageVO;
@@ -42,15 +46,12 @@ public class MemberController {
 	@Autowired
 	private ICommCodeService codeService;
 	
-	
 	@Resource(name="memberService")
 	private IMemberService memberService;
 	
+	@Autowired
+	private NextITFileUpload nextITFileUpload;
 	
-	/*
-	 * @ModelAttribute 사용하면 자동으로 Model에 담아준다. 따라서 
-	 * 어떤로직이라도 처리 후 화면에서 jobList와  hobbyList를 접근할 수 있습니다.
-	 * */
 	@ModelAttribute("jobList")
 	public List<CodeVO> jobList(){
 		return codeService.getCodeListByParent("JB00");
@@ -60,16 +61,13 @@ public class MemberController {
 		return codeService.getCodeListByParent("HB00");
 	}
 	
-	
-	
-	
-	
 	@RequestMapping(value = "/member/memberRegister", method = RequestMethod.POST)
 	public String memberRegister(
 			@Validated(value = MemberRegister.class) @ModelAttribute("member") MemberVO member
 			,BindingResult error
 			,Model model
 			,ResultMessageVO resultMessageVO
+			,@RequestParam(required = false)MultipartFile[] profilePhoto
 			) {
 		System.out.println("MemberController memberRegister member.toString(): "
 			+ member.toString());
@@ -78,14 +76,36 @@ public class MemberController {
 			return "/login/join";
 		}
 		
+		boolean fileuploadFlag = true;
+		if(profilePhoto != null) {
+			 try {
+				List<AttachVO>  attachList 
+					= nextITFileUpload.fileUpload(profilePhoto
+							, "PROFILEPHOTO", "profilePhoto");
+				if(attachList.size()>0) {
+					member.setAttachList(attachList);
+				}
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				fileuploadFlag = false;
+			}
+		}
+		
+		
 		try{
 			if(member.getMemId() != null && ! member.getMemId().equals("")) {
 				memberService.registerMember(member);
 			}else {
 				throw new Exception();
 			}
-			return "redirect:/login/sign";
-			
+			//return "redirect:/login/sign";
+			if(fileuploadFlag) {
+				return "redirect:/login/sign";
+			}else {
+				resultMessageVO.failSetting(false
+						, "회원등록 성공, 프로필 업로드 실패"
+						, "회원 등록되었으나 프로필은 업로드 되지 못하였습니다. 전산실에 문의 부탁드립니다. 042-719-8850");
+			}
 		}catch(BizDuplicateKeyException bde){
 			bde.printStackTrace();
 			resultMessageVO.failSetting(false

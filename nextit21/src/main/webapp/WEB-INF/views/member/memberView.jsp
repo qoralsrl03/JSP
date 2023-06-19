@@ -149,6 +149,11 @@ function fn_cancel(){
 						</div>
              		</c:when>
              		<c:when test="${bne eq null and de eq null }">
+             			<c:if test="${not empty member.atchNo }">
+             				<img alt="프로필사진" src='<c:url value="/image/${member.atchNo }" />'>
+             			</c:if>
+             		
+             		
              			<table >
 							<tbody>
 								<tr>

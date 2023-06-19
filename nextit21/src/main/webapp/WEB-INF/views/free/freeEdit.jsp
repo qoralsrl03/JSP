@@ -15,6 +15,30 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/freeBoardEdit.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/footer.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style type="text/css">
+	.file_area > div > div:first-child > span{
+		float: left;
+	}
+	.file_area > div > div:first-child > a{
+		float: left;
+	}
+	.file_area > div > div:first-child > button{
+		float: right;
+	}
+	.file_area > div > div:last-child{
+		clear:both;
+	}
+	.btn_delete{
+		float: right;
+	}
+	.td_right a{
+		color: #166cea;
+	}
+	.td_right a:hover{
+		color: #ed5422;
+	}
+</style>
+
 <script>
 function fn_submitCheck(){
 	
@@ -78,9 +102,11 @@ function fn_submitCheck(){
                 </c:if>
             
             	<c:if test="${bne eq null and de eq null }">
-            		<form:form name="freeModify" action="${pageContext.request.contextPath }/free/freeModify" 
+            		<form:form name="freeModify" 
+            			action="${pageContext.request.contextPath }/free/freeModify" 
             			method="post"
-            			modelAttribute="freeBoard" >
+            			modelAttribute="freeBoard" 
+            			enctype="multipart/form-data">
             	      <div id="div_table">
 	                      <table>
 	                          <colgroup>
@@ -147,8 +173,45 @@ function fn_submitCheck(){
 	                              		${freeBoard.boHit }
 	                              </td>
 	                          </tr>
+	                          
+	                          <%-- ${freeBoard.attachList } --%>
+	                          <tr>
+                         			<td class="td_left">첨부파일
+                         				<button type="button" id="id_btn_new_file">추가</button>
+                         			</td>
+                         			<td class="td_right file_area">
+                       					<c:forEach items="${ freeBoard.attachList }" 
+                       						var="attach" varStatus="status">
+                    							<div>
+                    								<div>
+                    									<span>${status.count } &#46;&nbsp;&nbsp;</span> <!--1부터 시작  -->
+                    									<a href="">
+                    										${attach.atchOriginalName }	
+                    									</a>
+                    									<button type="button" class="btn_file_delete"
+                    										data-atch-no="${attach.atchNo }">삭제</button>
+                    								</div>	
+                    								<div>
+                    									&nbsp;&nbsp;&nbsp; 크기 : ${attach.atchConvertSize }
+                    									, 다운로드 횟수 : ${attach.atchDownHit }
+                    								</div>	
+                    							</div>
+                       					</c:forEach>
+                    						<div class="form-inline">
+                    							<input type="file" name="boFiles">
+                    							<button type="button" class="btn_delete">삭제</button>
+                    						</div>
+                         			</td>
+                         				
+	                          </tr>
+	                          	 	 	
+	                          
+	                          
 	                      </table>
 	                  </div>
+		                  
+		                  
+                  
                   
 		                <!-- 버튼 -->
 		                <div class="div_button">
@@ -168,5 +231,37 @@ function fn_submitCheck(){
 		<%@ include file="/WEB-INF/views/footer/footer.jsp" %>
     </footer>
 </div>  
+
+<script type="text/javascript">
+$("#id_btn_new_file").click(function(){
+	//alert("id_btn_new_file");
+	$(".file_area").append(
+		'<div class="file_div">'
+		+	'<input type="file" name="boFiles" />'
+		+	'<button type="button" class="btn_delete" >삭제</button>'
+		+'</div>'
+	);
+});
+
+$(".file_area").on("click" , '.btn_delete', function(){
+	//alert(".file_area .btn_delete");
+	$(this).closest('div').remove();
+});
+
+$(".btn_file_delete").click(function(){
+	//alert(".btn_file_delete: " + $(this).data("atch-no"));
+	
+	$(this).closest('.file_area')
+		.append('<input type="hidden" name="delAtchNos" value="'+$(this).data("atch-no")+'" />')
+		
+	$(this).closest('div').parent().remove();
+})
+
+
+
+
+
+
+</script>
 </body>
 </html>

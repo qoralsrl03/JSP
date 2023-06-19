@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,19 +38,25 @@ public class NextITFileUpload {
 		}
 		return attachList;
 	}
+	
+	@Value("#{util['file.upload.path']}")
+	private String uploadPath;
+	
 
 	private AttachVO getAttachInfoAndFileUpload(MultipartFile boFile, String category, String path) throws IllegalStateException, IOException {
 		// TODO Auto-generated method stub
 		
 		//리눅스
-		String filePath = "/home/ssam/upload/" + path;
+		//String filePath = "/home/ssam/upload/" + path;
 		//윈도우 
 		//String filePath = "C:/ssam/upload/"+ path;
 		
+		//uploadPath = null;
+		
+		String filePath = uploadPath + File.separator + path;
 		String fileName = UUID.randomUUID().toString();
 		
-		logger.info("filePath + fileName : "  
-				+ filePath + File.separator + fileName);
+		logger.info("filePath + fileName : " + filePath + File.separator + fileName);
 		
 		File saveFile = new File(filePath + File.separator + fileName);
 		if(!saveFile.getParentFile().exists()) {

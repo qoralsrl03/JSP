@@ -208,6 +208,15 @@ form[name="deleteForm"]{
   	padding-right: 10px;
   	padding-top:5px
 }
+
+/*a태그 css 입히기*/
+.td_right a{
+	color: #166cea;
+}
+.td_right a:hover{
+	color: #ed5422;
+}
+
 </style>
 
 
@@ -321,6 +330,29 @@ function fn_freeHide(){
                                   ${freeBoard.boModDate ne null ? freeBoard.boModDate : freeBoard.boRegDate }
                               </td>
                           </tr>
+                          
+                          		<!--파일 리스트 출력  -->
+                       			<%-- ${freeBoard.attachList} --%>
+                       		<tr>
+                       			<td class="td_left">첨부파일</td>
+                    				<td class="td_right">
+                    					<c:forEach items="${freeBoard.attachList}"
+                    						var="attach" varStatus="status">
+                    							<div>
+													${status.count}                    							
+													<a href="<c:url value='/attach/download/${attach.atchNo }'/>" target="_blank">
+														${attach.atchOriginalName } 
+													</a>
+													<br>
+														&nbsp;&nbsp;&nbsp;크기: ${attach.atchConvertSize}
+															, 다운로드 횟수 :${attach.atchDownHit} 
+													<br>
+                    							</div>
+                    					</c:forEach>
+                    				</td>
+                       		</tr>
+                       		
+                          		
                       </table>
                   </div>
                   <!-- 버튼 -->

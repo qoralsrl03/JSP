@@ -1,11 +1,16 @@
 package kr.or.nextit.free.service;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,9 @@ import kr.or.nextit.free.vo.FreeBoardVO;
 @Service("freeBoardService")
 public class FreeBoardServiceImpl implements IFreeBoardService {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	
 	@Autowired
 	private IFreeBoardMapper freeMapper;
 
@@ -88,6 +96,12 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 		if(freeBoard == null ) {
 			throw new BizNotEffectedException();
 		}
+		
+		List<AttachVO> attachList = attachMapper.getAttachList(boNo, "FREE");
+		logger.info("FreeBoardServiceImpl getBoard attachList:"
+				+ attachList);
+		freeBoard.setAttachList(attachList);
+		
 		return freeBoard;
 	}
 
@@ -121,6 +135,29 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			throw new BizNotEffectedException(); 
 		}
 
+		//기존 파일정보 삭제
+		int[] delAtchNos = freeBoard.getDelAtchNos();
+		logger.info("delAtchNos :" + Arrays.toString(delAtchNos));
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("delAtchNos", delAtchNos);
+		if(delAtchNos !=null && delAtchNos.length >0) {
+			attachMapper.deleteAttaches(map);
+		}
+		
+		
+		//신규 파일 정보 추가
+		List<AttachVO> attachList = freeBoard.getAttachList();
+		if(attachList !=null && attachList.size()>0) {
+			for(AttachVO attch : attachList) {
+				attch.setAtchParentNo(freeBoard.getBoNo());
+				attch.setAtchRegId(freeBoard.getBoWriter());
+				
+				attachMapper.insertAttach(attch);
+			}
+		}
+		
+		
+		
 	}
 
 	

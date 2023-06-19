@@ -1,5 +1,6 @@
 package kr.or.nextit.free.vo;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -49,7 +50,15 @@ public class FreeBoardVO {
 	//attachList 추가
 	private List<AttachVO> attachList;
 	
+	//delAtchNos
+	private int[] delAtchNos;
 	
+	public int[] getDelAtchNos() {
+		return delAtchNos;
+	}
+	public void setDelAtchNos(int[] delAtchNos) {
+		this.delAtchNos = delAtchNos;
+	}
 	public List<AttachVO> getAttachList() {
 		return attachList;
 	}
@@ -154,8 +163,10 @@ public class FreeBoardVO {
 				+ boWriter + ", boPass=" + boPass + ", boContent=" + boContent + ", boIp=" + boIp + ", boHit=" + boHit
 				+ ", boRegDate=" + boRegDate + ", boModDate=" + boModDate + ", boDelYn=" + boDelYn + ", boDelId="
 				+ boDelId + ", boDelDate=" + boDelDate + ", boCategoryNm=" + boCategoryNm + ", rnum=" + rnum
-				+ ", attachList=" + attachList + "]";
+				+ ", attachList=" + attachList + ", delAtchNos=" + Arrays.toString(delAtchNos) + "]";
 	}
+ 
+	
  
 	
 	

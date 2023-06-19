@@ -93,6 +93,7 @@ public class FreeBoardController {
 		//String originalFileName = boFiles.getOriginalFilename();
 		//logger.info("originalFileName : "+ originalFileName);
 
+		boolean fileuploadFlag = true;
 		if(boFiles != null) {
 			/*String filePath ="/home/ssam/upload/";
 			try {
@@ -103,20 +104,14 @@ public class FreeBoardController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			
 			 try {
 				List<AttachVO>  attachList = nextITFileUpload.fileUpload(boFiles, "FREE", "free");
-				
 				if(attachList.size()>0) {
 					freeBoard.setAttachList(attachList);
 				}
-				
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
+			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				fileuploadFlag = false;
 			}
 		}
 		
@@ -127,7 +122,14 @@ public class FreeBoardController {
 			}else {
 				throw new Exception();
 			}
-			return "redirect:/free/freeList";
+			
+			if(fileuploadFlag) {
+				return "redirect:/free/freeList";
+			}else {
+				resultMessageVO.failSetting(false
+						, "파일업로드실패"
+						, "게시글은 등록되었으나 파일이 업로드 되지 못하였습니다. 전산실에 문의 부탁드립니다. 042-719-8850");
+			}
 		}catch(Exception de){
 			resultMessageVO.failSetting(false
 					, "게시글 등록 실패"
@@ -177,21 +179,51 @@ public class FreeBoardController {
 	
 	
 	@RequestMapping("/freeModify")
-	public String freeModify(@Validated(value = FreeModify.class) @ModelAttribute("freeBoard") FreeBoardVO freeBoard
+	public String freeModify(
+			@Validated(value = FreeModify.class) @ModelAttribute("freeBoard") FreeBoardVO freeBoard
 			,BindingResult error
 			, Model model
-			, ResultMessageVO resultMessageVO) {
+			, ResultMessageVO resultMessageVO
+			,@RequestParam(required = false)MultipartFile[] boFiles
+			
+			) {
 
 		if(error.hasErrors()) {
 			return "/free/freeEdit";
 		}
+		
+		boolean fileuploadFlag = true;
+		if(boFiles != null) {
+			 try {
+				List<AttachVO>  attachList = nextITFileUpload.fileUpload(boFiles, "FREE", "free");
+				if(attachList.size()>0) {
+					freeBoard.setAttachList(attachList);
+				}
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				fileuploadFlag = false;
+			}
+		}
+		
+		
 		try{
 			if( freeBoard.getBoNo()!= null && ! freeBoard.getBoNo().equals("") ) {
 				freeBoardService.modifyBoard(freeBoard);
 			}else {
 				throw new Exception();
 			}
-			return "redirect:/free/freeView?boNo="+freeBoard.getBoNo();
+			//return "redirect:/free/freeView?boNo="+freeBoard.getBoNo();
+			
+			
+			if(fileuploadFlag) {
+				return "redirect:/free/freeView?boNo="+freeBoard.getBoNo();
+			}else {
+				resultMessageVO.failSetting(false
+						, "파일업로드실패"
+						, "게시글은 수정되었으나 파일이 업로드 되지 못하였습니다. 전산실에 문의 부탁드립니다. 042-719-8850");
+			}
+			
+			
 			
 		}catch(BizPasswordNotMatchedException bpn){
 			resultMessageVO.failSetting(false

@@ -10,15 +10,22 @@
 	<context:property-placeholder location="classpath:/config/db.properties"/>
 	
 	
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
 		destroy-method="close">
 		<property name="driverClassName" value="${db.driverClassName}"/>
 		<property name="url" value="${db.url}"/>
 		<property name="username" value="${db.username}"/>
 		<property name="password" value="${db.password}"/>
 		<property name="defaultAutoCommit" value="${db.defaultAutoCommit}"/>
+	</bean> -->
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
+		destroy-method="close">
+		<property name="driverClassName" value="#{dbInfo['db.driverClassName']}"/>
+		<property name="url" value="#{dbInfo['db.url']}"/>
+		<property name="username" value="#{dbInfo['db.username']}"/>
+		<property name="password" value="#{dbInfo['db.password']}"/>
+		<property name="defaultAutoCommit" value="#{dbInfo['db.defaultAutoCommit']}"/>
 	</bean>
-	
-	
 	
 </beans>

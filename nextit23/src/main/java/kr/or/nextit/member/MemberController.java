@@ -143,7 +143,7 @@ public class MemberController {
 			model.addAttribute("de", de);
 			de.printStackTrace();
 		}
-		return "/member/memberView";
+		return "member.memberView";
 	}
 	
 	
@@ -162,7 +162,7 @@ public class MemberController {
 			model.addAttribute("de", de);
 			de.printStackTrace();
 		}
-		return "/member/memberEdit";
+		return "member.memberEdit";
 	}
 	
 	@RequestMapping(value = "/member/memberModify", method = RequestMethod.POST)
@@ -170,12 +170,27 @@ public class MemberController {
 			@Validated(value = MemberModify.class) @ModelAttribute("member") MemberVO member
 			,BindingResult error
 			, Model model
-			, ResultMessageVO resultMessageVO) {
+			, ResultMessageVO resultMessageVO
+			, @RequestParam(required=false)MultipartFile[] profilePhoto
+			) {
 		System.out.println("MemberController memberModify member.toStirng(): "
 				+ member.toString());
 
 		if(error.hasErrors()) {
-			return "/member/memberEdit";
+			return "member.memberEdit";
+		}
+		
+		
+		boolean fileUploadflag = true;
+		if(profilePhoto !=null) {
+			try {
+				List<AttachVO> attachList = nextITFileUpload.fileUpload(profilePhoto, "PROFILEPHOTO", "profilePhoto");
+				member.setAttachList(attachList);
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				fileUploadflag = false;
+				e.printStackTrace();
+			}
 		}
 		
 		try{
@@ -184,7 +199,11 @@ public class MemberController {
 			}else {
 				throw new Exception();
 			}
-			return "redirect:/member/memberView?memId="+member.getMemId();
+			if(fileUploadflag) {
+				return "redirect:/member/memberView?memId="+member.getMemId();
+			}else {
+				resultMessageVO.failSetting(false, "파일 업로드 실패", "회원정보는 수정되었으나 파일이 업로드 되지 못하였습니다. 전산실에 문의 부탁드립니다. 042-719-8850");
+			}
 			
 		}catch(BizNotEffectedException bne){
 			resultMessageVO.failSetting(false
@@ -277,7 +296,7 @@ public class MemberController {
 			model.addAttribute("de", de);
 			de.printStackTrace();
 		}
-		return "/member/memberList";
+		return "member.memberList";
 	}
 
 	
@@ -337,7 +356,7 @@ public class MemberController {
 			de.printStackTrace();
 			model.addAttribute("de", de);
 		}
-		return "/member/memberRole";
+		return "member.memberRole"; 
 		
 	}
 

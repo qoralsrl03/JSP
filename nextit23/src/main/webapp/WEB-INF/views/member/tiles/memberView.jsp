@@ -1,26 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>NextIT</title>
-<link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath }/images/nextit_log.jpg" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/header.css">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/memberView.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/footer.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/member/memberView.js"></script>
-</head>
-<body>
-<div id="wrap">
-	 <div class="header">
-         <div class="top_nav">
-             <!-- header 영역 -->
-             <%@ include file="/WEB-INF/views/header/header.jsp" %>
-             
-         </div>
-     </div>
-     <!-- header e -->
 
      <div class="intro_bg">
          <div class="intro_text">
@@ -50,58 +34,53 @@
 						</div>
              		</c:when>
              		<c:when test="${bne eq null and de eq null }">
-             			<c:if test="${not empty member.atchNo }">
-             				<img alt="프로필사진" src='<c:url value="/image/${member.atchNo }" />'>
-             			</c:if>
-             		
-             		
+						<c:if test="${not empty member.atchNo }">
+	             			<img alt="프로필사진" src="<c:url value='/image/${member.atchNo } '/>">
+						</c:if>	
              			<table >
 							<tbody>
 								<tr>
 									<td class="td_left">아이디</td>
-									<td class="td_right"><c:out value="${member.memId }"/></td>
+									<td class="td_right">${member.memId }</td>
 								</tr>
 								<tr>
 									<td class="td_left">회원명</td>
-									<td class="td_right"><c:out value="${member.memName }"/></td>
+									<td class="td_right">${member.memName }</td>
 								</tr>
 								<tr>
 									<td class="td_left">우편번호</td>
-									<td class="td_right"><c:out value="${member.memZip }"/></td>
+									<td class="td_right">${member.memZip }</td>
 								</tr>
 								<tr>
 									<td class="td_left">주소</td>
-									<td class="td_right"><c:out value="${member.memAdd1 } ${member.memAdd2 }"/></td>
+									<td class="td_right">${member.memAdd1 } ${member.memAdd2 }</td>
 								</tr>
 								<tr>
 									<td class="td_left">생일 </td>
+									<!-- 'YYYY-MM-DD'형태만 value값으로 들어갈수있어요 --> 
 									<td class="td_right"><input type="date" name="memBir"  value="${fn:substring(member.memBir ,0,10) }" readonly="readonly"></td> 
 								</tr>
 								<tr>
 									<td class="td_left">핸드폰</td>
-									<td class="td_right"><c:out value="${member.memHp }"/></td>
+									<td class="td_right">${member.memHp }</td>
 								</tr>
 								<tr>
 									<td class="td_left">직업</td>
-									<td class="td_right"><c:out value="${member.memJob }"/></td>
+									<td class="td_right">${member.memJob }</td>
 								</tr>
 								<tr>
 									<td class="td_left">취미</td>
-									<td class="td_right"><c:out value="${member.memHobby }"/></td>
+									<td class="td_right">${member.memHobby }</td>
 								</tr>
 								<tr>
 									<td class="td_left">마일리지</td>
-									<td class="td_right"><c:out value="${member.memMileage}"/></td>
+									<td class="td_right">${member.memMileage}</td>
 								</tr>
-								<%-- <tr>
-									<td class="td_left">탈퇴여부</td>
-									<td class="td_right">${member.memDelYn }</td>
-								</tr> --%>
 							</tbody>
 						</table>
 						<div class="div_button">
-		                     <input type="button" onclick="location.href='${pageContext.request.contextPath}/home/home.do'" value="HOME">
-		                     <input type="button" onclick="fn_memberEdit('${member.memId }')" value="수정">
+		                     <input type="button" onclick="location.href='${pageContext.request.contextPath}/home'" value="HOME">
+		                     <input type="button" onclick="fn_memberEdit('${member.memId }')" value="수정"><%-- ${member.memId }는 '' 필요  --%>
 		                     <input type="button" onclick="fn_memberDelete()" value="탈퇴">
 		                 </div>
              		</c:when>
@@ -113,8 +92,8 @@
 	<!-- 회원탈퇴 모달 -->
 	<div id="modal_div1" >
 		<div id="modal_div2" >
-			<form name="deleteForm" action="${pageContext.request.contextPath}/member/memberDelete" method="post">
-				<input type="hidden" id="memId" name="memId" value="${member.memId }"/>
+			<form name="deleteForm" action="<c:out value='${pageContext.request.contextPath }/member/memberDelete'/>" method="post">
+				<input type="hidden" id="memId" name="memId" value="<c:out value='${searchVO.pageIndex}'/>"/>
 	            <div class="int-area">
 	                <input type="password" id="memPass" name="memPass" value="" placeholder="PASSWORD" autocomplete="off" required/>
 	            </div>
@@ -127,10 +106,3 @@
 		</div>
 	</div>
 		
-     <!-- footer -->
-     <footer id="page_footer">
-         <%@ include file="/WEB-INF/views/footer/footer.jsp" %>
-     </footer>
-</div>    
-</body>
-</html>

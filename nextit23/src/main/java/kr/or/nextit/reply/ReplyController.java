@@ -44,7 +44,7 @@ public class ReplyController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "/free/freeView";
+		return "free.freeView";
 	}
 
 	//@RequestMapping(value="/replyList", produces = "application/json;charset=utf-8")

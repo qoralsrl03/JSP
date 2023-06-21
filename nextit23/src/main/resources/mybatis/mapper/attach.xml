@@ -110,17 +110,20 @@
 	</foreach>
 </delete>
 
-
-<select id="getAttachNo" parameterType="map"
-	resultType="int">
+<select id="getAttachNo" parameterType="map" resultType="int">
 	select
-		atch_no
-	from 
-		attach
-	where
-		atch_parent_no = #{memId}
-		and atch_category = #{atchCategory}
-
+         a.*
+    from(    
+        SELECT
+            atch_no 
+        FROM
+            attach 
+        WHERE
+            atch_parent_no = #{memId}
+			AND atch_category = #{atchCategory} 
+        order by atch_no desc    
+            )a        
+     where rownum = 1
 </select>
 
 

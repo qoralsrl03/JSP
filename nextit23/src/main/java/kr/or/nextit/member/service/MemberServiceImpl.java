@@ -207,6 +207,15 @@ public class MemberServiceImpl implements IMemberService {
 		if(resultCnt != 1){
 			throw new BizNotEffectedException();
 		}
+		
+		List<AttachVO> attachList = member.getAttachList();
+		if(attachList != null) {
+			for(AttachVO attach : attachList) {
+				attach.setAtchParentNo(member.getMemId());
+				attach.setAtchRegId(member.getMemId());
+				attachMapper.insertAttach(attach);
+			}
+		}
 	}
 
 	@Override

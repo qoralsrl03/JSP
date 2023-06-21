@@ -1,27 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>NextIT</title>
-<link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath }/images/nextit_log.jpg" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/header.css">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/memberList.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/footer.css">
-<!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
-</head>
-<body>
-<div id="wrap">
-    <div class="header">
-        <div class="top_nav">
-            <!-- header 영역 -->
-            <%@ include file="/WEB-INF/views/header/header.jsp" %>
-            
-        </div>
-    </div>
-    <!-- header e -->
+
 
     <div class="intro_bg">
         <div class="intro_text">
@@ -48,11 +29,11 @@
 				</div>
 			</c:if>      
             
-			<c:if test="${bnf eq null and de eq null}">
+            <c:if test="${bnf eq null and de eq null}">
             	<div class="div_search">
-					<form name="search" action="${pageContext.request.contextPath}/member/memberList" method="post">
+					<form name="search" action="${pageContext.request.contextPath }/member/memberList" method="post">
 						<input type="hidden" name="curPage" value="${searchVO.curPage}"> 
-						<input type="hidden" name="rowSizePerPage" value="${searchVO.rowSizePerPage}">	
+						<input type="hidden" name="rowSizePerPage" value="${searchVO.rowSizePerPage}">
 						<div>
 							<label for="id_searchType">검색</label>
 							&nbsp;&nbsp;
@@ -105,7 +86,7 @@
 	            <div id="div_table">
 	                <table>
 	                    <colgroup>
-	                    		<col width="40">
+	                    	<col width="40">
 	                        <col width="60">
 	                        <col >
 	                        <col width="150">
@@ -117,32 +98,24 @@
 	                    </colgroup>
 	                    <thead>
 	                        <tr>
-	                        	<th><input type="checkbox" id="check_all"></th>
+	                        	<th><input type="checkbox" id="check_all" /></th>
 	                        	<th>순번</th>
 	                           	<th>ID</th>
-									<th>회원명</th>
-									<th>HP</th>
-									<th>생일</th>
-									<th>직업</th>
-									<th>취미</th>
-									<th>마일리지</th>
+								<th>회원명</th>
+								<th>HP</th>
+								<th>생일</th>
+								<th>직업</th>
+								<th>취미</th>
+								<th>마일리지</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	
 	                        <c:forEach items="${memberList }" var="member">
 					 			<tr>
-					 				<td><input type="checkbox" 
-					 					name="check_list"
-					 					value="${member.memId }"
-					 					></td>
+					 				<td><input type="checkbox" name="check_list" value="${member.memId }" /></td>
 					 				<td>${member.rnum }</td>
-									<td>
-										<a href="${pageContext.request.contextPath }/member/memberRole?memId=${member.memId}">
-										 ${member.memId }
-										</a>
-										
-									</td>
+									<td><a href="${pageContext.request.contextPath }/member/memberRole?memId=${member.memId }">${member.memId }</a></td>
 									<td>${member.memName }</td>
 									<td>${member.memHp }</td>
 									<td>${member.memJoinDate}</td>
@@ -171,7 +144,7 @@
 	
 	              <!-- paging -->
 	            <div class="div_paging">
-	                <ul class="pagination">
+	               <ul class="pagination">
 	            		<c:if test="${searchVO.firstPage gt 10 }">
 		                	<li><a href="#" data-curPage=${searchVO.firstPage-1 }   data-rowSizePerPage=${searchVO.rowSizePerPage } >&laquo;</a></li>
 		                </c:if> 
@@ -194,32 +167,21 @@
 							<li><a href="#" data-curPage=${searchVO.lastPage+1  }   data-rowSizePerPage=${searchVO.rowSizePerPage }>&raquo;</a></li>
 						</c:if>
 	                </ul>
-	                
-	                	<div class="div_board_write">
-	                		<input type="button" onclick="fn_delete()" value="회원삭제">
-	                	</div>
-	                
+	                <div class="div_board_write">
+	                    <input type="button" onclick="fn_delete()" value="회원삭제">
+	                </div>
 	            </div>
-           	</c:if>  
-			
+           	</c:if>
+           	
            	
         </div>
     </div>
 
-    <!-- footer -->
-    <footer id="page_footer">
-		<!-- footer영역 -->
-		<%@ include file="/WEB-INF/views/footer/footer.jsp" %>
-    </footer>
-</div>
- 
-<form name="memMultiDelete" 
-	action="${pageContext.request.contextPath}/member/memberMultiDelete"
-	method="post">
+
+<form name="memMultiDelete" action="${pageContext.request.contextPath }/member/memberMultiDelete" method="post">
 	<input type="hidden" name="memMultiId" value="">
-</form> 
- 
- 
+</form>
+
 <script type="text/javascript">
 
 $('#id_rowSizePerPage').change(function() {
@@ -244,7 +206,6 @@ $('ul.pagination li a').click(function(e) {
 
 
 sf.find("button[type=submit]").click(function(e) {
-	//alert("button[type=submit]");
 	e.preventDefault();
 	curPage.val(1);
 	rowSizePerPage.val(10);
@@ -261,44 +222,37 @@ $('#id_btn_reset').click(function() {
 	sf.find("input[name='rowSizePerPage']").val(10);
 	sf.submit();
 });  
-</script>
 
 
-<script type="text/javascript">
+
 function fn_delete(){
-	//alert("fn_delete");
-	let result = confirm("삭제를 진행 하시겠습니까?");
+	let result = confirm("삭제를 진행하시겠습니까?");
 	if(result){
 		let cl = $("input:checkbox[name='check_list']:checked");
-		console.log("cl :", cl);
+		console.log("cl", cl);
 		
-		if(cl.length == 0){
-			alert("선택된 회원이 없습니다. 탈퇴시키고자 하는 회원을 체크한 후 진행해주세요.");
+		if(cl.length == 0 ){
+			alert("선택된 회원이 없습니다. 삭제하고자 하는 회원에 체크를 한 후 진행해 주세요");
 			return;
 		}
 		
-		let multiId =[];
+		let multiId = [];
 		
 		cl.each(function(){
-			//console.log("cl[i]: "+ $(this).val());
+			console.log("$(this).val() : ", $(this).val());
+			
 			multiId.push($(this).val());
 		});
-		console.log("multiId :", multiId);
-		console.log("JSON.stringify(multiId) :", JSON.stringify(multiId));
-		
-		
-		$("form[name='memMultiDelete']")
-			.find("input[name='memMultiId']")
-			.val(JSON.stringify(multiId));
-		
+
+		console.log("multiId", multiId);
+		console.log(JSON.stringify(multiId));
+		$("form[name='memMultiDelete']").find("input[name='memMultiId']").val(JSON.stringify(multiId));
 		$("form[name='memMultiDelete']").submit();
 	}
 	
 }
 
 $("#check_all").click(function(){
-	//alert("check_all");
-	
 	if($(this).prop("checked")){
 		$("input[name='check_list']").prop("checked", true);
 	}else{
@@ -307,6 +261,3 @@ $("#check_all").click(function(){
 });
 
 </script>
-
-</body>
-</html>

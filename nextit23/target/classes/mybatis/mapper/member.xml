@@ -93,7 +93,7 @@
 		, mem_del_yn , mem_join_date 	, mem_edit_date 	
 	FROM MEMBER     										
 	WHERE mem_id = #{memId}     									
-	AND mem_pass = #{memPass}								
+	<!-- AND mem_pass = #{memPass}	 -->							
 	AND mem_del_yn = 'N'  
 </select>  
 

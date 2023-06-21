@@ -12,6 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.or.nextit.attach.mapper.IAttachMapper;
@@ -28,14 +29,16 @@ import kr.or.nextit.free.vo.FreeBoardVO;
 public class FreeBoardServiceImpl implements IFreeBoardService {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	
+
 	@Autowired
 	private IFreeBoardMapper freeMapper;
 
-	//@Autowired
 	@Inject
 	private IAttachMapper attachMapper;
+
+	@Inject
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	
 	@Override
 	public void registerBoard(FreeBoardVO freeBoard) throws BizNotEffectedException {
@@ -46,6 +49,10 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 		String boNo = freeMapper.getFreeBoardKey();
 		System.out.println("boNo: "+ boNo);
 		freeBoard.setBoNo(boNo);
+		
+		String encodedPw = passwordEncoder.encode(freeBoard.getBoPass());
+		logger.info("encodedPw : " + encodedPw);
+		freeBoard.setBoPass(encodedPw);
 		
 		int resultCnt = freeMapper.insertBoard(freeBoard);
 		
@@ -126,10 +133,15 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 		if( vo==null) {
 			throw new BizNotFoundException();
 		}
-		if(!vo.getBoPass().equals(freeBoard.getBoPass())) {
+		/*if(!vo.getBoPass().equals(freeBoard.getBoPass())) {
 			throw new BizPasswordNotMatchedException();
+		}*/
+		boolean match = passwordEncoder.matches(freeBoard.getBoPass(), vo.getBoPass() );
+		logger.info("modifyBoard match : " + match);
+		if(!match) {
+			throw new BizPasswordNotMatchedException(); 
 		}
-	
+		
 		int resultCnt = freeMapper.updateBoard(freeBoard);
 		if(resultCnt != 1 ){ 
 			throw new BizNotEffectedException(); 
@@ -170,7 +182,12 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			throw new BizNotFoundException();
 		}
 		
-		if(!vo.getBoPass().equals(freeBoard.getBoPass())) { 
+		/*if(!vo.getBoPass().equals(freeBoard.getBoPass())) { 
+			throw new BizPasswordNotMatchedException(); 
+		}*/
+		boolean match = passwordEncoder.matches(freeBoard.getBoPass(), vo.getBoPass() );
+		logger.info("deleteBoard match : " + match);
+		if(!match) {
 			throw new BizPasswordNotMatchedException(); 
 		}
 	

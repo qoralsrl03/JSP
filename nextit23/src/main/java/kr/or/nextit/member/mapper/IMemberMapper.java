@@ -118,4 +118,7 @@ public interface IMemberMapper {
 	 */
 	public int idCheck(String memId);
 
+
+	public List<String> getUserRoleListByUserId(String username);
+
 }

@@ -27,7 +27,7 @@
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<filter>
+	<!-- <filter>
 		<filter-name>Thrid_LoginCheckFitler</filter-name>
 		<filter-class>kr.or.nextit.common.util.NextITLoginCheckFilter</filter-class>
 	</filter>  
@@ -36,8 +36,20 @@
 		<url-pattern>/home/*</url-pattern>
 		<url-pattern>/free/*</url-pattern>
 		<url-pattern>/member/*</url-pattern>
-	</filter-mapping>  
+	</filter-mapping>   -->
 		
+
+	<!--스프링 시큐리티 필터 추가  -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>  
+	
+
 
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
@@ -93,6 +105,13 @@
 		<servlet-name>NextITApiServlet</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
+	<!-- request 등록  -->
+	<listener>
+		<listener-class>
+			 org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>
 
 
 <error-page>

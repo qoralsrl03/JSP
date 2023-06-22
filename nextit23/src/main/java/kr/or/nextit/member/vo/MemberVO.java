@@ -70,6 +70,14 @@ public class MemberVO {
 	private List<AttachVO> attachList;
 	private Integer atchNo;
 
+	private List<String> roleList;
+	
+	public List<String> getRoleList() {
+		return roleList;
+	}
+	public void setRoleList(List<String> roleList) {
+		this.roleList = roleList;
+	}
 	public Integer getAtchNo() {
 		return atchNo;
 	}
@@ -203,8 +211,11 @@ public class MemberVO {
 				+ ", memMail=" + memMail + ", memJob=" + memJob + ", memHobby=" + memHobby + ", memMileage="
 				+ memMileage + ", memDelYn=" + memDelYn + ", memJoinDate=" + memJoinDate + ", memEditDate="
 				+ memEditDate + ", memPassNew=" + memPassNew + ", rememberMe=" + rememberMe + ", userRoleList="
-				+ userRoleList + ", rnum=" + rnum + ", attachList=" + attachList + ", atchNo=" + atchNo + "]";
+				+ userRoleList + ", rnum=" + rnum + ", attachList=" + attachList + ", atchNo=" + atchNo + ", roleList="
+				+ roleList + "]";
 	}
+	
+	
  
 	
 	

@@ -269,6 +269,17 @@
 		mem_id = #{memId}	
 </select>
 
+<select id="getUserRoleListByUserId" parameterType="string"
+	resultType="string">
+
+	SELECT 
+		USER_ROLE
+	FROM
+		MEMBER_ROLE
+	WHERE
+		USER_ID = #{username}
+			
+</select>
 
 
 

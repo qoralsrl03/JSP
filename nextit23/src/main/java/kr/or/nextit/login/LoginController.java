@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,9 +51,21 @@ public class LoginController {
 	//@RequestMapping( value="/login", method = RequestMethod.POST )
 	//@RequestMapping( value="/login", method = RequestMethod.GET)
 	@GetMapping("/login")
-	public String login() {
+	public String login(HttpServletRequest request) {
 		//System.out.println("LoginController login");
 		logger.info("LoginController login");
+		
+		Cookie[] cookies =  request.getCookies();
+		if( cookies != null && cookies.length >0){
+			for(int i=0; i< cookies.length ; i++){
+				if(cookies[i].getName().equals("rememberMe")){
+					System.out.println( cookies[i].getName() +" : "+ cookies[i].getValue());
+					request.setAttribute("checkBox", "checked");
+					request.setAttribute("memId", cookies[i].getValue());
+				}
+			}
+		}
+		
 		return "/login/login";
 	}
 	
@@ -126,9 +140,26 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/home")
-	public String home() {
-		//System.out.println("LoginController home");
+	public String home(HttpSession session, HttpServletResponse response) {
 		logger.info("LoginController home");
+		
+		MemberVO member =  (MemberVO) session.getAttribute("memberVO");
+		
+		String rememberMe = member.getRememberMe();
+		if (rememberMe != null && rememberMe.equals("Y")) {
+			System.out.println("rememberMe is Y");
+			Cookie cookie= new Cookie("rememberMe", member.getMemId());
+			cookie.setMaxAge(60*60*24); 
+			cookie.setHttpOnly(true);
+			//cookie.setSecure(true);
+			response.addCookie(cookie);
+		}else{
+			Cookie cookie= new Cookie("rememberMe", "");
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
+		}
+		
+		
 		
 		return "/home/home";
 	}

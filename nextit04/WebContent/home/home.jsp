@@ -12,14 +12,13 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/footer.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
+<!-- 아래 자바 스크립틀릿은 사용자가 로그인을 하고 home을 왔는지, 도메인을 조작해서 왔는지 체크하는 코드, 로그인을 안했으면 login페이지로 -->
 <%
 MemberVO member =  (MemberVO)session.getAttribute("memberVO");
 if(member == null){
 	response.sendRedirect(
 			request.getContextPath()+"/login/login.jsp?msg=none");
 }
-
-
 %>
 
 <script>

@@ -102,6 +102,7 @@
 	                <div class="div_board_write">
 	                		<input type="button" onclick="fn_commit()" value="수정">
 	                		<input type="button" onclick="fn_delete()" value="삭제">
+							<input type="button" onclick="fn_excelExport()" value="엑셀">		                		
 	                </div>
 	            </div>
            	</c:if>
@@ -113,7 +114,7 @@
 	 
  <script type="text/javascript" src="${pageContext.request.contextPath }/realgrid/realgrid-lic.js"></script>
  <script type="text/javascript" src="${pageContext.request.contextPath }/realgrid/realgrid.2.6.3.min.js"></script>
- 
+ <script src="${pageContext.request.contextPath }/realgrid/jszip.min.js"></script>
  <script type="text/javascript">
 
  /*let data = [
@@ -487,6 +488,32 @@ function fn_delete(){
 	});
 	
 	
+}
+
+function fn_excelExport(){
+	//alert("fn_excelExport");
+	let excelType = "false"; //MS Excel 2007(.xlsx)
+	let showProgress = "false"; //프로그래스바 표시 여부  (기본값: false)
+	let indicator = "default"; //indicator(기본값:default)
+	let header = "default"; //header(기본값:default)
+	let footer = "default"; //fotter  포함 (기본값:default)
+
+	gridView.exportGrid({
+		 type: "excel",
+		 target: "local",
+		 fileName: "NextIT회원목록.xlsx",
+		 lookupDisplay: true,				//드롭다운 label값으로 표기
+		 showProgress: showProgress,
+		 progressMessage: "엑셀 Export중입니다.",
+		 indicator: indicator,
+		 header: header,
+		 footer: footer,
+		 compatibility: excelType,
+		 done: function () {  //내보내기 완료 후 실행되는 함수
+			 //alert("done excel export")
+		 }
+	 });
+	 
 }
 
 </script>

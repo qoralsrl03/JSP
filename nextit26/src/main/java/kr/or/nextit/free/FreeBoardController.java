@@ -177,6 +177,11 @@ public class FreeBoardController {
 
 		try{
 			if(freeBoard.getBoTitle() != null && ! freeBoard.getBoTitle().equals("") ) {
+				
+				//특수문자 치환
+				//String boTitle  = nextITXSScheck(freeBoard.getBoTitle());
+				//freeBoard.setBoTitle(boTitle);
+				
 				freeBoardService.registerBoard(freeBoard);
 			}else {
 				throw new Exception();
@@ -199,6 +204,40 @@ public class FreeBoardController {
 		return "/common/message";
 		
 	}
+
+	private String nextITXSScheck(String value) {
+		// TODO Auto-generated method stub
+		
+		StringBuffer strBuff = new StringBuffer();
+		for(int i=0; i<value.length(); i++	) {
+			char c = value.charAt(i);
+			switch (c) {
+			case '<':
+				strBuff.append("&lt");
+				break;
+			case '>':
+				strBuff.append("&gt");
+				break;	
+			case '&':
+				strBuff.append("&amp");
+				break;	
+			case '"':
+				strBuff.append("&quot");
+				break;		
+			case '\'':
+				strBuff.append("&apos");
+				break;		
+				
+			default:
+				strBuff.append(c);
+				break;
+			}
+		}
+		
+		value = strBuff.toString();
+		return value;
+	}
+
 
 	@RequestMapping("/freeView")
 	public String freeView(@ModelAttribute("searchVO") FreeBoardSearchVO searchVO, @RequestParam String boNo ,Model model) {

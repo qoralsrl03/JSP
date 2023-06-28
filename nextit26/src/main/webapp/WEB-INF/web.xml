@@ -27,6 +27,16 @@
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	
+	<filter>
+		<filter-name>XSSCheckFilter</filter-name>
+		<filter-class>kr.or.nextit.common.util.NextITXSSCheckFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>XSSCheckFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- <filter>
 		<filter-name>Thrid_LoginCheckFitler</filter-name>
 		<filter-class>kr.or.nextit.common.util.NextITLoginCheckFilter</filter-class>
@@ -49,8 +59,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>  
 	
-
-
+	
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<!-- 
